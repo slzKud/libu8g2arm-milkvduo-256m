@@ -24,8 +24,37 @@
 #include "gpio.h"
 #include <unistd.h>
 
+const int MILKV_DUO_PIN_MAP[] = {
+    [0] = 508,
+    [1] = 509,
+    [2] = 378,
+    [3] = 377,
+    [4] = 371,
+    [5] = 372,
+    [6] = 375,
+    [7] = 374,
+    [8] = 373,
+    [9] = 370,
+    [10] = 425,
+    [11] = 426,
+    [12] = 496,
+    [13] = 497,
+    [14] = 494,
+    [15] = 495,
+    [16] = 503,
+    [17] = 504,
+    [18] = 502,
+    [19] = 505,
+    [20] = 507,
+    [21] = 506,
+    [22] = 356,
+    [25] = 440,
+    [26] = 451,
+    [27] = 454,
+};
+
 #define GPIO_FILENAME_DEFINE(pin,field) char fileName[255] = {0}; \
-        sprintf(fileName, "/sys/class/gpio/gpio%d/%s", pin, field);
+        sprintf(fileName, "/sys/class/gpio/gpio%d/%s", MILKV_DUO_PIN_MAP[pin], field);
 
 static int writeValueToFile(char* fileName, char* buff)
 {
@@ -74,7 +103,7 @@ int exportGPIOPin(int pin)
     FILE* fp = fopen("/sys/class/gpio/export", "w");
     if (fp != NULL)
     {
-        fprintf(fp, "%d", pin);
+        fprintf(fp, "%d", MILKV_DUO_PIN_MAP[pin]);
         fclose(fp);
         usleep(30000);
         return 0;
@@ -91,7 +120,7 @@ int unexportGPIOPin(int pin)
     FILE* fp = fopen("/sys/class/gpio/unexport", "w");
     if (fp != NULL)
     {
-        fprintf(fp, "%d", pin);
+        fprintf(fp, "%d", MILKV_DUO_PIN_MAP[pin]);
         fclose(fp);
         usleep(30000);
         return 0;
